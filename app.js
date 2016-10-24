@@ -27,7 +27,7 @@ http.createServer(function(req, res) {
         });
 
         form.on('end', function() {
-            console.log('ended!!!!', arguments);
+            //console.log('ended!!!!', arguments);
         });
 
         form.on('aborted', function() {
@@ -35,11 +35,6 @@ http.createServer(function(req, res) {
         });
 
         form.parse(req, function(err, fields, files) {
-
-            //fs.readFile(files.upload.path, function (err, data) {
-            //  if (err) throw err;
-            //  var fileContents = data;
-            //});
 
             var fileContents = fs.readFileSync(files.upload.path);
             s3.createBucket(function() {
