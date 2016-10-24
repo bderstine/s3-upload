@@ -1,4 +1,4 @@
-//http://stackoverflow.com/questions/17309559/stream-uploading-file-to-s3-on-node-js-using-formidable-and-knox-or-aws-sdk
+var fs = require('fs');
 var formidable = require('formidable');
 var http = require('http');
 var util = require('util');
@@ -10,6 +10,7 @@ var s3 = new AWS.S3({
     apiVersion: '2006-03-01'
 });
 
+var myBucket = 'bizzar-s3-upload';
 
 http.createServer(function(req, res) {
 
@@ -33,22 +34,25 @@ http.createServer(function(req, res) {
             console.log('aborted', arguments);
         });
 
-	form.on('file', function(name, file, arguments){
-            console.log('form.on file');
-            //console.log(arguments);
-            //var a = arguments;
-            //console.log(a[1]['name']);
-            //console.log(a[1]['path']);
-        });
-
-        //var s3 = new AWS.S3();
-        //var params = {Bucket: 'bizzar-s3-upload', Key: 'myImageFile.jpg'};
-        //var file = require('fs').createWriteStream('/path/to/file.jpg');
-        //s3.getObject(params).createReadStream().pipe(file);
-
         form.parse(req, function(err, fields, files) {
-            console.log('form.parse')
-            console.log(files.upload.name);
+
+            //fs.readFile(files.upload.path, function (err, data) {
+            //  if (err) throw err;
+            //  var fileContents = data;
+            //});
+
+            var fileContents = fs.readFileSync(files.upload.path);
+            s3.createBucket(function() {
+              var params = {Bucket: myBucket, Key: files.upload.name, Body: fileContents};
+              s3.upload(params, function(err, data) {
+                if (err) {
+                  console.log("Error uploading data: ", err);
+                } else {
+                  console.log("Successfully uploaded data to "+myBucket+"/"+files.upload.name);
+                }
+              });
+            });
+
             res.writeHead(200, {'content-type': 'text/plain'});
             res.write('received upload:\n\n');
             res.end(util.inspect({fields: fields, files: files}));
