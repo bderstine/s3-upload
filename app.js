@@ -18,16 +18,8 @@ http.createServer(function(req, res) {
 
         var form = new formidable.IncomingForm();
 
-        form.on('progress', function(bytesReceived, bytesExpected) {
-            //console.log('onprogress', parseInt( 100 * bytesReceived / bytesExpected ), '%');
-        });
-
         form.on('error', function(err) {
-            console.log('err',err);
-        });
-
-        form.on('end', function() {
-            //console.log('ended!!!!', arguments);
+            console.log('err', err);
         });
 
         form.on('aborted', function() {
@@ -51,6 +43,7 @@ http.createServer(function(req, res) {
             res.writeHead(200, {'content-type': 'text/plain'});
             res.write('received upload:\n\n');
             res.end(util.inspect({fields: fields, files: files}));
+
         });
         return;
     }
