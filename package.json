@@ -1,0 +1,22 @@
+{
+  "name": "s3-upload",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bderstine/s3-upload.git"
+  },
+  "author": "Brad Derstine",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bderstine/s3-upload/issues"
+  },
+  "homepage": "https://github.com/bderstine/s3-upload#readme",
+  "dependencies": {
+    "formidable": "^1.0.17"
+  }
+}
