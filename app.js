@@ -18,7 +18,7 @@ http.createServer(function(req, res) {
         var form = new formidable.IncomingForm();
 
         form.on('progress', function(bytesReceived, bytesExpected) {
-            console.log('onprogress', parseInt( 100 * bytesReceived / bytesExpected ), '%');
+            //console.log('onprogress', parseInt( 100 * bytesReceived / bytesExpected ), '%');
         });
 
         form.on('error', function(err) {
@@ -34,7 +34,8 @@ http.createServer(function(req, res) {
         });
 
 	form.on('file', function(name, file, arguments){
-            console.log(arguments);
+            console.log('form.on file');
+            //console.log(arguments);
             //var a = arguments;
             //console.log(a[1]['name']);
             //console.log(a[1]['path']);
@@ -46,6 +47,8 @@ http.createServer(function(req, res) {
         //s3.getObject(params).createReadStream().pipe(file);
 
         form.parse(req, function(err, fields, files) {
+            console.log('form.parse')
+            console.log(files.upload.name);
             res.writeHead(200, {'content-type': 'text/plain'});
             res.write('received upload:\n\n');
             res.end(util.inspect({fields: fields, files: files}));
