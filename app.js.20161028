@@ -1,5 +1,4 @@
-var sleep = require('sleep');
-var im = require('imagemagick');
+var gm = require('gm');
 var fs = require('fs');
 var formidable = require('formidable');
 var http = require('http');
@@ -30,21 +29,7 @@ http.createServer(function(req, res) {
 
         form.parse(req, function(err, fields, files) {
 
-            im.resize({
-              srcPath: files.upload.path,
-              dstPath: '100_'+files.upload.path,
-              width: 100
-            }, function(err, stdout, stderr){
-              if (err) throw err;
-              //console.log('resized 100x100');
-            });
-
-            //console.log(process.cwd());
-            //console.log('Opening: '+__dirname+'/upload/100_'+files.upload.name);
-
-            sleep.sleep(3); //too fast, need to wait for file to save first
-            var fileContents = fs.readFileSync(__dirname+'/upload/100_'+files.upload.name);
-
+            var fileContents = fs.readFileSync(files.upload.path);
             s3.createBucket(function() {
               var params = {Bucket: myBucket, Key: files.upload.name, Body: fileContents};
               s3.upload(params, function(err, data) {
