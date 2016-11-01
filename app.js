@@ -30,17 +30,16 @@ http.createServer(function(req, res) {
 
         form.parse(req, function(err, fields, files) {
 
+            console.log('Type: '+files.upload.type);
+            console.log('Size: '+files.upload.size);
+
             im.resize({
               srcPath: files.upload.path,
               dstPath: files.upload.path+'_100',
               width: 100
             }, function(err, stdout, stderr){
               if (err) throw err;
-              //console.log('resized 100x100');
             });
-
-            //console.log(process.cwd());
-            //console.log('Opening: '+__dirname+'/upload/100_'+files.upload.name);
 
             sleep.sleep(3); //too fast, need to wait for file to save first
             var fileContents = fs.readFileSync(files.upload.path+'_100');
@@ -57,7 +56,7 @@ http.createServer(function(req, res) {
             });
 
             res.writeHead(200, {'content-type': 'text/plain'});
-            res.write('received upload:\n\n');
+            //res.write('received upload:\n\n');
             res.end(util.inspect({fields: fields, files: files}));
 
         });
