@@ -32,7 +32,7 @@ http.createServer(function(req, res) {
 
             im.resize({
               srcPath: files.upload.path,
-              dstPath: '100_'+files.upload.path,
+              dstPath: files.upload.path+'_100',
               width: 100
             }, function(err, stdout, stderr){
               if (err) throw err;
@@ -43,7 +43,7 @@ http.createServer(function(req, res) {
             //console.log('Opening: '+__dirname+'/upload/100_'+files.upload.name);
 
             sleep.sleep(3); //too fast, need to wait for file to save first
-            var fileContents = fs.readFileSync(__dirname+'/upload/100_'+files.upload.name);
+            var fileContents = fs.readFileSync(files.upload.path+'_100');
 
             s3.createBucket(function() {
               var params = {Bucket: myBucket, Key: files.upload.name, Body: fileContents};
